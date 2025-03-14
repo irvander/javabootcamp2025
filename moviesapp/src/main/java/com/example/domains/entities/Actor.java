@@ -121,13 +121,5 @@ public class Actor implements Serializable {
 		return "Actor [actorId=" + actorId + ", firstName=" + firstName + ", lastName=" + lastName + ", lastUpdate="
 				+ lastUpdate + " ]";
 	}
-	
-	public void retire() {
-		// set active to false
-		// set retirement date to current
-	}
 
-	public void awardWon(String award) {
-		//...
-	}
 }
