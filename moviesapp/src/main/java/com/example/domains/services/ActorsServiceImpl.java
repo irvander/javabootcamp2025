@@ -14,16 +14,16 @@ import com.example.exceptions.NotFoundException;
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
-	private ActorsRepository dao;
+	private ActorsRepository repo;
 
 	@Override
 	public List<Actor> getAll() {
-		return dao.findAll();
+		return repo.findAll();
 	}
 
 	@Override
 	public Optional<Actor> getOne(Integer id) {
-		return dao.findById(id);
+		return repo.findById(id);
 	}
 
 	@Override
@@ -31,10 +31,10 @@ public class ActorsServiceImpl implements ActorsService {
 		if(item == null) {
 			throw new InvalidDataException("El actor no puede ser nulo");
 		}
-		if(item.getActorId() > 0 && dao.existsById(item.getActorId())) {
+		if(item.getActorId() > 0 && repo.existsById(item.getActorId())) {
 			throw new DuplicateKeyException("El actor ya existe");
 		}
-		return dao.save(item);
+		return repo.save(item);
 	}
 
 	@Override

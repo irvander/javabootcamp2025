@@ -3,42 +3,42 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.domains.contracts.repositories.CategoriesRepository;
-import com.example.domains.contracts.services.CategoriesService;
-import com.example.domains.entities.Category;
+import com.example.domains.contracts.repositories.FilmsRepository;
+import com.example.domains.contracts.services.FilmsService;
+import com.example.domains.entities.Film;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
-public class CategoriesServiceImpl implements CategoriesService {
-	private CategoriesRepository repo;
+public class FilmsServiceImpl implements FilmsService {
+	private FilmsRepository repo;
 
 	@Override
-	public List<Category> getAll() {
+	public List<Film> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Optional<Category> getOne(Integer id) {
+	public Optional<Film> getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public Category add(Category item) throws DuplicateKeyException, InvalidDataException {
+	public Film add(Film item) throws DuplicateKeyException, InvalidDataException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Category modify(Category item) throws NotFoundException, InvalidDataException {
+	public Film modify(Film item) throws NotFoundException, InvalidDataException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(Category item) throws InvalidDataException {
+	public void delete(Film item) throws InvalidDataException {
 		// TODO Auto-generated method stub
 		
 	}
