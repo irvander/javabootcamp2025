@@ -2,8 +2,16 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
+
+import com.example.domains.core.entities.AbstractEntity;
 
 
 /**
@@ -13,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name="language")
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
-public class Language implements Serializable {
+public class Language extends AbstractEntity<Language> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,9 +30,13 @@ public class Language implements Serializable {
 	private int languageId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=20)
+	@NotBlank
+	@Size(max = 20, min = 2)
+	@Pattern(regexp = "^[a-zA-Z]", message = "El idioma sólo debe contener letras")
 	private String name;
 
 	//bi-directional many-to-one association to Film
@@ -104,6 +116,29 @@ public class Language implements Serializable {
 		filmsVO.setLanguageVO(null);
 
 		return filmsVO;
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(languageId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Language other = (Language) obj;
+		return languageId == other.languageId;
+	}
+
+	@Override
+	public String toString() {
+		return "Actor [languageId=" + languageId + ", name=" + name + "]";
 	}
 
 }

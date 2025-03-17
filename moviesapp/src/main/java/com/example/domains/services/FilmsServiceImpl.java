@@ -11,42 +11,61 @@ import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
 public class FilmsServiceImpl implements FilmsService {
-	private FilmsRepository repo;
+	private FilmsRepository dao;
+	
+	public FilmsServiceImpl(FilmsRepository dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public List<Film> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll();
 	}
 
 	@Override
 	public Optional<Film> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return dao.findById(id);
 	}
 
 	@Override
 	public Film add(Film item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("La película no puede ser nula");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(item.getFilmId() > 0 && dao.existsById(item.getFilmId())) {
+			throw new DuplicateKeyException("La película ya existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public Film modify(Film item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("La película no puede ser nula");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(!dao.existsById(item.getFilmId())) {
+			throw new NotFoundException("La película no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Film item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+		if(item == null) {
+			throw new InvalidDataException("La película no puede ser nula");
+		}
+		dao.delete(item);
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.deleteById(id);
 	}
 
 }

@@ -11,42 +11,61 @@ import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
 public class LanguagesServiceImpl implements LanguagesService {
-	private LanguagesRepository repo;
+	private LanguagesRepository dao;
+	
+	public LanguagesServiceImpl(LanguagesRepository dao) {
+		this.dao = dao;
+	}
 	
 	@Override
 	public List<Language> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll();
 	}
 
 	@Override
 	public Optional<Language> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return dao.findById(id);
 	}
 
 	@Override
 	public Language add(Language item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("El idioma no puede ser nulo");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(item.getLanguageId() > 0 && dao.existsById(item.getLanguageId())) {
+			throw new DuplicateKeyException("El idioma ya existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public Language modify(Language item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("El idioma no puede ser nulo");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(!dao.existsById(item.getLanguageId())) {
+			throw new NotFoundException("El idioma no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Language item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+		if(item == null) {
+			throw new InvalidDataException("El idioma no puede ser nulo");
+		}
+		dao.delete(item);
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.deleteById(id);
 	}
 
 }

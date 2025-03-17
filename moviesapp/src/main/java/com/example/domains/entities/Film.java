@@ -2,9 +2,17 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
+
+import com.example.domains.core.entities.AbstractEntity;
 
 
 /**
@@ -14,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name="film")
 @NamedQuery(name="Film.findAll", query="SELECT f FROM Film f")
-public class Film implements Serializable {
+public class Film extends AbstractEntity<Film> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,9 +31,11 @@ public class Film implements Serializable {
 	private int filmId;
 
 	@Lob
+	@NotBlank
 	private String description;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
 	private int length;
@@ -46,6 +56,9 @@ public class Film implements Serializable {
 	private BigDecimal replacementCost;
 
 	@Column(nullable=false, length=128)
+	@NotBlank
+	@Size(max = 128, min = 2)
+	@Pattern(regexp = "^[A-Z]*$", message = "El nombre debe estar en mayúsculas")
 	private String title;
 
 	//bi-directional many-to-one association to Language
@@ -208,5 +221,30 @@ public class Film implements Serializable {
 
 		return filmCategory;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(filmId);
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		return filmId == other.filmId;
+	}
+	
+	@Override
+	public String toString() {
+		return "Film [filmId=" + filmId  + ", title="+ title+ ", description=" + description 
+				+ ", lastUpdate=" + lastUpdate + ", length="+ length
+				+ ", rating="+ rating + ", releaseYear="+ releaseYear
+				+ ", rentalDuration="+ rentalDuration + ", rentalRate="+ rentalRate
+				+ ", replacementCost="+ replacementCost + ", language="+ language +"]";
+	}
 }
