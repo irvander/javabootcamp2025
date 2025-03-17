@@ -14,8 +14,6 @@ public interface ActorsRepository extends JpaRepository<Actor, Integer>, JpaSpec
 	List<Actor> findTop10ByFirstNameStartingWith(String prefix, Sort orderBy);
 	
 	List<Actor> findByActorIdGreaterThan(int id);
-	@Query(value = "SELECT a FROM Actor a WHERE a.actorId > ?1")
-	List<Actor> findNovedadesJPQL(int id);
 	@Query(value = "SELECT * FROM actor a WHERE a.actor_Id > :id", nativeQuery = true)
 	List<Actor> findNovedadesSQL(int id);
 }

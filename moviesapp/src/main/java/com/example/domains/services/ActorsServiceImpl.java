@@ -14,16 +14,20 @@ import com.example.exceptions.NotFoundException;
 
 @Service
 public class ActorsServiceImpl implements ActorsService {
-	private ActorsRepository repo;
+	private ActorsRepository dao;
+	
+	public ActorsServiceImpl(ActorsRepository dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public List<Actor> getAll() {
-		return repo.findAll();
+		return dao.findAll();
 	}
 
 	@Override
 	public Optional<Actor> getOne(Integer id) {
-		return repo.findById(id);
+		return dao.findById(id);
 	}
 
 	@Override
@@ -31,34 +35,45 @@ public class ActorsServiceImpl implements ActorsService {
 		if(item == null) {
 			throw new InvalidDataException("El actor no puede ser nulo");
 		}
-		if(item.getActorId() > 0 && repo.existsById(item.getActorId())) {
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(item.getActorId() > 0 && dao.existsById(item.getActorId())) {
 			throw new DuplicateKeyException("El actor ya existe");
 		}
-		return repo.save(item);
+		return dao.save(item);
 	}
 
 	@Override
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("El actor no puede ser nulo");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(!dao.existsById(item.getActorId())) {
+			throw new NotFoundException("El actor no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Actor item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+		if(item == null) {
+			throw new InvalidDataException("El actor no puede ser nulo");
+		}
+		dao.delete(item);
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.deleteById(id);
 	}
 
 	@Override
 	public void repartePremios() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 }

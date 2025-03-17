@@ -11,42 +11,61 @@ import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
 public class CategoriesServiceImpl implements CategoriesService {
-	private CategoriesRepository repo;
+	private CategoriesRepository dao;
+	
+	public CategoriesServiceImpl(CategoriesRepository dao) {
+		this.dao = dao;
+	}
 
 	@Override
 	public List<Category> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll();
 	}
 
 	@Override
 	public Optional<Category> getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return dao.findById(id);
 	}
 
 	@Override
 	public Category add(Category item) throws DuplicateKeyException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("La categoría no puede ser nula");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(item.getCategoryId() > 0 && dao.existsById(item.getCategoryId())) {
+			throw new DuplicateKeyException("La categoría ya existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public Category modify(Category item) throws NotFoundException, InvalidDataException {
-		// TODO Auto-generated method stub
-		return null;
+		if(item == null) {
+			throw new InvalidDataException("La categoría no puede ser nula");
+		}
+		if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
+		if(!dao.existsById(item.getCategoryId())) {
+			throw new NotFoundException("El actor no existe");
+		}
+		return dao.save(item);
 	}
 
 	@Override
 	public void delete(Category item) throws InvalidDataException {
-		// TODO Auto-generated method stub
-		
+		if(item == null) {
+			throw new InvalidDataException("La categoría no puede ser nula");
+		}
+		dao.delete(item);
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		dao.deleteById(id);
 	}
 
 }

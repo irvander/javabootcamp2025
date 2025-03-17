@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorsRepository;
 import com.example.domains.entities.Actor;
+import com.example.exceptions.InvalidDataException;
+import com.example.exceptions.NotFoundException;
 
 
 @SpringBootApplication
@@ -32,7 +34,12 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	private ActorsRepository dao;
 	
-	private void exampleData() {
+	private void exampleData() throws InvalidDataException {	
+		var actor = new Actor(202, "Emilie", "Valey");
+		dao.delete(actor);
+
+		dao.findAll().forEach(System.err::println);
+		
 		//var actor = new Actor(0, "Emilie", "Valey");
 		//dao.save(actor);
 /*		var item = dao.findById(201);

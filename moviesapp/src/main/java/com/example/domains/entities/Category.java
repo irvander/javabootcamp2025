@@ -2,8 +2,16 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
+
+import com.example.domains.core.entities.AbstractEntity;
 
 
 /**
@@ -13,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
-public class Category implements Serializable {
+public class Category extends AbstractEntity<Category> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,9 +30,13 @@ public class Category implements Serializable {
 	private int categoryId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
+	@NotBlank
+	@Size(max = 25, min = 2)
+	@Pattern(regexp = "^[a-zA-Z]", message = "Categoría sólo debe contener letras")
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
@@ -78,6 +90,28 @@ public class Category implements Serializable {
 		filmCategory.setCategory(null);
 
 		return filmCategory;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		return categoryId == other.categoryId;
+	}
+
+	@Override
+	public String toString() {
+		return "Category [categoryId=" + categoryId + ", name=" + name + ", lastUpdate=" + lastUpdate + "]";
 	}
 
 }
