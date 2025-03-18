@@ -2,9 +2,15 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
@@ -31,7 +37,6 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	private int filmId;
 
 	@Lob
-	@NotBlank
 	private String description;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
@@ -43,26 +48,37 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 	@Column(length=1)
 	private String rating;
 
+	@Min(1901)
+	@Max(2155)
 	@Column(name="release_year")
 	private Short releaseYear;
 
+	@NotNull
+	@Positive
 	@Column(name="rental_duration", nullable=false)
 	private byte rentalDuration;
 
+	@NotNull
+	@Digits(integer = 2, fraction = 2)
+	@DecimalMin(value = "0.0", inclusive = false)
 	@Column(name="rental_rate", nullable=false, precision=10, scale=2)
 	private BigDecimal rentalRate;
 
+	@NotNull
+	@Digits(integer = 3, fraction = 2)
+	@DecimalMin(value = "0.0", inclusive = false)
 	@Column(name="replacement_cost", nullable=false, precision=10, scale=2)
 	private BigDecimal replacementCost;
 
-	@Column(nullable=false, length=128)
 	@NotBlank
+	@Column(nullable=false, length=128)
 	@Size(max = 128, min = 2)
 	@Pattern(regexp = "^[A-Z]*$", message = "El nombre debe estar en mayúsculas")
 	private String title;
 
 	//bi-directional many-to-one association to Language
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name="language_id", nullable=false)
 	private Language language;
 
@@ -81,7 +97,31 @@ public class Film extends AbstractEntity<Film> implements Serializable {
 
 	public Film() {
 	}
-
+	
+	public Film(int filmId) {
+		this.filmId = filmId;
+	}
+	
+	public Film(int filmId, @NotBlank @Size(max = 128) String title, String description, @Min(1895) Short releaseYear,
+			@NotNull Language language, Language languageVO, @Positive byte rentalDuration,
+			@Positive @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 2, fraction = 2) BigDecimal rentalRate,
+			@Positive Integer length,
+			@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 3, fraction = 2) BigDecimal replacementCost,
+			String rating) {
+		super();
+		this.filmId = filmId;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.language = language;
+		this.languageVO = languageVO;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
+	}
+	
 	public int getFilmId() {
 		return this.filmId;
 	}
