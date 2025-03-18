@@ -1,10 +1,8 @@
 package com.example.domains.contracts.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-
+import com.example.domains.core.contracts.repositories.ProjectionsAndSpecificationJpaRepository;
 import com.example.domains.entities.Film;
 
-public interface FilmsRepository extends JpaRepository<Film, Integer>, JpaSpecificationExecutor<Film>{    
+public interface FilmsRepository extends ProjectionsAndSpecificationJpaRepository<Film, Integer> {    
 
 }

@@ -71,9 +71,4 @@ public class ActorsServiceImpl implements ActorsService {
 		dao.deleteById(id);
 	}
 
-	@Override
-	public void repartePremios() {
-		// TODO Auto-generated method stub	
-	}
-
 }

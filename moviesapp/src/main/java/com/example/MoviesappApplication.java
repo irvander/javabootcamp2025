@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.domains.contracts.repositories.CategoriesRepository;
+import com.example.domains.contracts.repositories.FilmsRepository;
 
 @SpringBootApplication
 public class MoviesappApplication implements CommandLineRunner {
@@ -19,14 +20,16 @@ public class MoviesappApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
 		
-		//example();
 		
 	}
-	
-	/*@Autowired
-	private CategoriesRepository dao;
+
+	/*
+	@Autowired
+	private FilmsRepository dao;
 	
 	private void example() {
-		dao.findByCategoryIdGreaterThan(7).forEach(System.err::println);
-	}*/
+		dao.findAll().forEach(System.err::println);
+	}
+	*/
 }
+	
