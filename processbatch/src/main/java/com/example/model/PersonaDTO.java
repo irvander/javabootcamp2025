@@ -4,6 +4,18 @@ public class PersonaDTO {
 	private long id;
 	private String nombre, apellidos, correo, sexo, ip;
 	
+	public PersonaDTO() {}
+	
+	public PersonaDTO(long id, String nombre, String apellidos, String correo, String sexo, String ip) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.correo = correo;
+		this.sexo = sexo;
+		this.ip = ip;
+	}
+	
 	public long getId() {
 		return id;
 	}
