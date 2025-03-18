@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -23,9 +24,10 @@ import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.xml.StaxEventItemReader;
+import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.builder.StaxEventItemReaderBuilder;
+import org.springframework.batch.item.xml.builder.StaxEventItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +36,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.transaction.PlatformTransactionManager;
+
 import com.example.model.Persona;
 import com.example.model.PersonaDTO;
 import com.thoughtworks.xstream.security.AnyTypePermission;
@@ -73,12 +76,12 @@ public class PersonasBatchConfiguration {
 				.processor(personaItemProcessor).writer(toDB).build();
 	}
 
-	@Bean
+/*	@Bean
 	Job personasJob(PersonasJobListener listener, JdbcBatchItemWriter<Persona> personaDBItemWriter) {
 		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).listener(listener)
 				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter)).build();
 	}
-
+*/
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
 		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
@@ -125,7 +128,7 @@ public class PersonasBatchConfiguration {
 		marshaller.setAliases(aliases);
 		marshaller.setTypePermissions(AnyTypePermission.ANY);
 		return new StaxEventItemReaderBuilder<PersonaDTO>().name("personaXMLItemReader")
-				.resource(new ClassPathResource("Personas.xml")).addFragmentRootElements("Persona")
+				.resource(new FileSystemResource("input/Personas.xml")).addFragmentRootElements("Persona")
 				.unmarshaller(marshaller).build();
 	}
 
@@ -135,10 +138,26 @@ public class PersonasBatchConfiguration {
 				.reader(personaXMLItemReader()).processor(personaItemProcessor).writer(personaDBItemWriter).build();
 	}
 
-	/*
-	 * @Bean Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step
-	 * exportDB2CSVStep) { return new JobBuilder("personasJob",
-	 * jobRepository).incrementer(new RunIdIncrementer()).start(importXML2DBStep1)
-	 * .next(exportDB2XMLStep).next(exportDB2CSVStep).build(); }
-	 */
+	public StaxEventItemWriter<Persona> personaXMLItemWriter() {
+		XStreamMarshaller marshaller = new XStreamMarshaller();
+		Map<String, Class> aliases = new HashMap<>();
+		aliases.put("Persona", Persona.class);
+		marshaller.setAliases(aliases);
+		return new StaxEventItemWriterBuilder<Persona>().name("personaXMLItemWriter")
+				.resource(new FileSystemResource("output/outputData.xml")).marshaller(marshaller)
+				.rootTagName("Personas").overwriteOutput(true).build();
+	}
+
+	@Bean
+	Step exportDB2XMLStep(JdbcCursorItemReader<Persona> personaDBItemReader) {
+		return new StepBuilder("exportDB2XMLStep", jobRepository).<Persona, Persona>chunk(100, transactionManager)
+				.reader(personaDBItemReader).writer(personaXMLItemWriter()).build();
+	}
+
+	@Bean
+	Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
+		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).start(importXML2DBStep1)
+				.next(exportDB2XMLStep).next(exportDB2CSVStep).build();
+	}
+
 }
