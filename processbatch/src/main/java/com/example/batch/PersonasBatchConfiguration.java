@@ -79,8 +79,6 @@ public class PersonasBatchConfiguration {
 				.start(importCSV2DBStep(1, "input/personas-1.csv", personaDBItemWriter)).build();
 	}
 
-	//
-
 	@Bean
 	JdbcCursorItemReader<Persona> personaDBItemReader(DataSource dataSource) {
 		return new JdbcCursorItemReaderBuilder<Persona>().name("personaDBItemReader")
@@ -111,14 +109,14 @@ public class PersonasBatchConfiguration {
 	}
 
 	/*
-	 * @Bean public Job personasJob(PersonasJobListener listener,
+	 * @Bean Job personasJob(PersonasJobListener listener,
 	 * JdbcBatchItemWriter<Persona> personaDBItemWriter, Step exportDB2CSVStep) {
-	 * return new JobBuilder("personasJob", jobRepository) .incrementer(new
-	 * RunIdIncrementer()) .listener(listener) .start(importCSV2DBStep(1,
-	 * "input/personas-1.csv", personaDBItemWriter)) .next(exportDB2CSVStep)
-	 * .build(); }
+	 * return new JobBuilder("personasJob", jobRepository).incrementer(new
+	 * RunIdIncrementer()).listener(listener) .start(importCSV2DBStep(1,
+	 * "input/personas-1.csv", personaDBItemWriter)).next(exportDB2CSVStep).build();
+	 * }
+	 * 
 	 */
-	//
 
 	public StaxEventItemReader<PersonaDTO> personaXMLItemReader() {
 		XStreamMarshaller marshaller = new XStreamMarshaller();
@@ -137,12 +135,10 @@ public class PersonasBatchConfiguration {
 				.reader(personaXMLItemReader()).processor(personaItemProcessor).writer(personaDBItemWriter).build();
 	}
 
-/*	@Bean
-	Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step exportDB2CSVStep) {
-		return new JobBuilder("personasJob", jobRepository).incrementer(new RunIdIncrementer()).start(importXML2DBStep1)
-				.next(exportDB2XMLStep).next(exportDB2CSVStep).build();
-	}
-	*/
-	
-	
+	/*
+	 * @Bean Job personasJob(Step importXML2DBStep1, Step exportDB2XMLStep, Step
+	 * exportDB2CSVStep) { return new JobBuilder("personasJob",
+	 * jobRepository).incrementer(new RunIdIncrementer()).start(importXML2DBStep1)
+	 * .next(exportDB2XMLStep).next(exportDB2CSVStep).build(); }
+	 */
 }
