@@ -3,6 +3,9 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.domains.contracts.repositories.ActorsRepository;
@@ -59,6 +62,36 @@ public class ActorsServiceImpl implements ActorsService {
 	public void repartePremios() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Iterable<Actor> getAll(Sort sort) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<Actor> getAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
