@@ -29,6 +29,11 @@ import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.domains.entities.Actor;
 
 import org.springframework.http.HttpStatus;
@@ -45,11 +50,13 @@ public class ActorsResource {
 		}
 
 	@GetMapping
+	@Hidden
 	public List<ActorDTO> getAll() {
 		return srv.getByProjection(ActorDTO.class);
 	}
 
 	@GetMapping(path = "/{id}")
+	@Operation(summary="Obtiene un actor por su id")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		if (item.isEmpty()) {
