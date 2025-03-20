@@ -19,6 +19,11 @@ import com.example.exceptions.NotFoundException;
 public class ActorsServiceImpl implements ActorsService {
 	private ActorsRepository dao;
 
+	public ActorsServiceImpl(ActorsRepository dao) {
+		super();
+		this.dao = dao;
+	}
+
 	@Override
 	public List<Actor> getAll() {
 		return dao.findAll();
@@ -66,8 +71,7 @@ public class ActorsServiceImpl implements ActorsService {
 
 	@Override
 	public <T> List<T> getByProjection(Class<T> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAllBy(type);
 	}
 
 	@Override
@@ -78,8 +82,7 @@ public class ActorsServiceImpl implements ActorsService {
 
 	@Override
 	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAllBy(pageable, type);
 	}
 
 	@Override

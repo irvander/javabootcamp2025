@@ -4,16 +4,21 @@ import com.example.domains.entities.Actor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data @AllArgsConstructor
-@Schema(name="Actor", description="Datos del actor")
+@Schema(name = "Actor", description = "Datos del actor")
 public class ActorDTO {
+//	@JsonProperty("id")
 	private int actorId;
-	@Schema(description="nombre", minLength=2, maxLength=45, example="Ana")
+	@Schema(description = "Nombre del actor", example = "Pepito", required = true, minLength = 2, maxLength = 45)
 	private String firstName;
-	@Schema(description="apellido", minLength=2, maxLength=45, example="Perez")
+	@NotBlank
+	@Size(min = 2, max = 45)
+	@Schema(description = "Apellidos del actor", example = "Grillo")
 	private String lastName;
 	
 	public static ActorDTO from(Actor source) {
@@ -23,4 +28,11 @@ public class ActorDTO {
 	public static Actor from(ActorDTO source) {
 		return new Actor(source.getActorId(), source.getFirstName(), source.getLastName());
 	}
+
+//	public ActorDTO(int actorId, String firstName, String lastName) {
+//		super();
+//		this.id = actorId;
+//		this.nombre = firstName;
+//		this.apellidos = lastName;
+//	}
 }

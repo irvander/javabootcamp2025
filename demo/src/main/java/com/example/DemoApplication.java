@@ -28,7 +28,7 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
-		exampleData();
+		//exampleData();
 	}
 	
 	@Autowired
