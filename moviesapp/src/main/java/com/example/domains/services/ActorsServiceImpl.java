@@ -20,6 +20,7 @@ public class ActorsServiceImpl implements ActorsService {
 	private ActorsRepository dao;
 
 	public ActorsServiceImpl(ActorsRepository dao) {
+		super();
 		this.dao = dao;
 	}
 

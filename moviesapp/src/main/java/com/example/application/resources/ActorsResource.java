@@ -1,7 +1,5 @@
 package com.example.application.resources;
 
-package com.example.application.resources;
-
 import java.net.URI;
 import java.util.List;
 
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.application.resources.ActorsResource.Titulo;
 import com.example.domains.contracts.services.ActorsService;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.exceptions.BadRequestException;

@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.domains.contracts.repositories.CategoriesRepository;
-import com.example.domains.contracts.repositories.FilmsRepository;
+import com.example.domains.contracts.repositories.ActorsRepository;
 
 @SpringBootApplication
 public class MoviesappApplication implements CommandLineRunner {
@@ -19,17 +19,16 @@ public class MoviesappApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.err.println("Aplicacion arrancada");
-		
+		example();
 		
 	}
 
-	/*
+
 	@Autowired
-	private FilmsRepository dao;
+	private ActorsRepository dao;
 	
 	private void example() {
 		dao.findAll().forEach(System.err::println);
 	}
-	*/
 }
 	
