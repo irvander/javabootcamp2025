@@ -26,21 +26,23 @@ import com.example.domains.contracts.repositories.ActorsRepository;
 import com.example.domains.contracts.services.ActorsService;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.exceptions.BadRequestException;
+import com.example.exceptions.DuplicateKeyException;
+import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 import com.example.domains.entities.Actor;
 
 import org.springframework.http.HttpStatus;
 
-
 @RestController
 @RequestMapping("/actores/v1")
 public class ActorsResource {
+
 	private ActorsService srv;
 
 	public ActorsResource(ActorsService srv) {
-		super();
-		this.srv = srv;
-	}
+			super();
+			this.srv = srv;
+		}
 
 	@GetMapping
 	public List<ActorDTO> getAll() {
@@ -50,30 +52,34 @@ public class ActorsResource {
 	@GetMapping(path = "/{id}")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
-		if(item.isEmpty()) {
+		if (item.isEmpty()) {
 			throw new NotFoundException("No se encontró el actor con id " + id);
 		}
 		return ActorDTO.from(item.get());
 	}
-	
-	@PostMapping
-	public ResponseEntity<Object> create(@Valid @RequestBody ActorDTO item) throws BadRequestException {
-		//var newItem = srv.add(ActorDTO.from(item));
-		//URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-		//	.buildAndExpand(newItem.getActorId()).toUri();
-		return null; //ResponseEntity.created(location).build();
 
+	@PostMapping
+	public ResponseEntity<Object> create(@Valid @RequestBody ActorDTO item)
+			throws BadRequestException, DuplicateKeyException, InvalidDataException {
+		var newItem = srv.add(ActorDTO.from(item));
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newItem.getActorId()).toUri();
+		return ResponseEntity.created(location).build();
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@PathVariable int id, @Valid @RequestBody Actor item) throws BadRequestException, NotFoundException {
-		// …
+	public void update(@PathVariable int id, @Valid @RequestBody ActorDTO item)
+			throws BadRequestException, NotFoundException, InvalidDataException {
+		if (item.getActorId() != id) {
+			throw new BadRequestException("El id del actor no coincide con el recurso a modificar");
+		}
+		srv.modify(ActorDTO.from(item));
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable int id) {
-		// ..
+		srv.deleteById(id);
 	}
 }
