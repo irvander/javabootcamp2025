@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.domains.core.contracts.repositories.RepositoryWithProjections;
 import com.example.domains.entities.Actor;
 
-public interface ActorsRepository extends JpaRepository<Actor, Integer>, JpaSpecificationExecutor<Actor>, RepositoryWithProjections{    
+public interface ActorsRepository extends JpaRepository<Actor, Integer>, JpaSpecificationExecutor<Actor>, RepositoryWithProjections {    
 	List<Actor> findTop5ByFirstNameStartingWithOrderByLastNameDesc(String prefix);
 	List<Actor> findTop10ByFirstNameStartingWith(String prefix, Sort orderBy);
 	

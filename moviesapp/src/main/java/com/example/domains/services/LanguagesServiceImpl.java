@@ -3,6 +3,11 @@ package com.example.domains.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import com.example.domains.contracts.repositories.LanguagesRepository;
 import com.example.domains.contracts.services.LanguagesService;
 import com.example.domains.entities.Language;
@@ -10,10 +15,12 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+@Service
 public class LanguagesServiceImpl implements LanguagesService {
 	private LanguagesRepository dao;
 	
 	public LanguagesServiceImpl(LanguagesRepository dao) {
+		super();
 		this.dao = dao;
 	}
 	
@@ -66,6 +73,31 @@ public class LanguagesServiceImpl implements LanguagesService {
 	@Override
 	public void deleteById(Integer id) {
 		dao.deleteById(id);
+	}
+
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		return dao.findAllBy(pageable, type);
+	}
+
+	@Override
+	public Iterable<Language> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	@Override
+	public Page<Language> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 }

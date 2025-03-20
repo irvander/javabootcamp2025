@@ -73,7 +73,7 @@ public class ActorsResource {
 	public List<Titulo> getPeliculas(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);
 		if (item.isEmpty()) {
-			throw new NotFoundException("No se encontró el actor con id " + id);
+			throw new NotFoundException("No se encontró el elemento con id " + id);
 		}
 		return item.get().getFilmActors().stream()
 				.map(o -> new Titulo(o.getFilm().getFilmId(), o.getFilm().getTitle()))
