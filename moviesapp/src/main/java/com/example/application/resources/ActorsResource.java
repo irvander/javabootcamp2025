@@ -66,7 +66,7 @@ public class ActorsResource {
 		return ActorDTO.from(item.get());
 	}
 
-	record Titulo(int id, String titulo) {	}
+	record Titulo(int id, String titulo) {	} //record: clase inmutable, Java 17
 	
 	@GetMapping(path = "/{id}/pelis")
 	@Transactional

@@ -36,7 +36,7 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	@Column(nullable=false, length=20)
 	@NotBlank
 	@Size(max = 20, min = 2)
-	@Pattern(regexp = "^[a-zA-Z]", message = "El idioma sólo debe contener letras")
+	@Pattern(regexp = "^[A-Z]", message = "El idioma sólo debe contener letras")
 	private String name;
 
 	//bi-directional many-to-one association to Film
@@ -50,7 +50,6 @@ public class Language extends AbstractEntity<Language> implements Serializable {
 	public Language() {
 	}
 	
-
 	public Language(int languageId, String name) {
 		super();
 		this.languageId = languageId;
