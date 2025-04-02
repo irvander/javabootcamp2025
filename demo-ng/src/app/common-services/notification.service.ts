@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { LoggerService } from '@my/core';
+import { Subject } from 'rxjs';
 
 export enum NotificationType { error = 'error', warn = 'warn', info = 'info', log = 'log' }
 
@@ -14,14 +15,20 @@ export class Notification {
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService {
+export class NotificationService implements OnDestroy {
   public readonly NotificationType = NotificationType;
   private notifications: Notification[] = [];
+  private notification$ = new Subject<Notification>();
 
   constructor(private out: LoggerService) { }
 
+  ngOnDestroy(): void {
+    this.notification$.complete()
+  }
+
   public get notificationList(): Notification[] { return Object.assign([], this.notifications); }
   public get areThereNotifications() { return this.notifications.length > 0; }
+  public get Notification() { return this.notification$; }
 
   public add(msg: string, type: NotificationType = NotificationType.error) {
     if (!msg || msg === '') {
@@ -32,6 +39,7 @@ export class NotificationService {
       (this.notifications[this.notifications.length - 1].Id + 1) : 1;
     const n = new Notification(id, msg, type);
     this.notifications.push(n);
+    this.notification$.next(n);
     // Redundancia: Los errores también se muestran en consola
     if (type === NotificationType.error) {
       this.out.error(`NOTIFICATION: ${msg}`);
