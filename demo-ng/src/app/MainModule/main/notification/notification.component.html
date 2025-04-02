@@ -1,6 +1,6 @@
-@if(VM.HayNotificaciones) {
+@if(VM.areThereNotifications) {
 <div class="notificaciones">
-    @for(item of VM.Listado; track item.Id) {
+    @for(item of VM.notificationList; track item.Id) {
     <div class="alert {{item.Type | i18nSelect:{
     'error':'alert-danger',
     'warn':'alert-warning', 'info':'alert-primary',
