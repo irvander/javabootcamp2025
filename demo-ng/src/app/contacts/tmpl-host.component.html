@@ -1,0 +1,6 @@
+@switch (VM.OperationType) {
+    @case ('add') { <app-contacts-add /> }
+    @case ('edit') { <app-contacts-edit /> }
+    @case ('view') { <app-contacts-view /> }
+    @default { <app-contacts-list /> }
+}
