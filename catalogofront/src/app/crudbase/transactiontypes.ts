@@ -1,0 +1,1 @@
+export type TransCRUD = 'list' | 'add' | 'edit' | 'view' | 'delete';
