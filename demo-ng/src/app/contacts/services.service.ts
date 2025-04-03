@@ -50,7 +50,7 @@ export class ContactsViewModelService {
   protected contentList: Array<any> = [];
   protected element: any = {};
   protected idOriginal: any = null;
-  protected listURL = '/contactos';
+  protected listURL = '/';
 
   constructor(
     protected notify: NotificationService,
